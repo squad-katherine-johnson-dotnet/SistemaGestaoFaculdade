@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ModuloPOO.DesafioSquad.Models;
+﻿namespace SistemaGestaoFaculdade.Interfaces;
 //Contrato de notificação | Uma interface funciona como um contrato
 public interface INotificavel
 {
