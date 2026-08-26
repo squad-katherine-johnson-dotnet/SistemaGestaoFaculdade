@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SistemaGestaoFaculdade.Interfaces;
 
-namespace ModuloPOO.DesafioSquad.Models
-{   //Aluno herda da Pessoa (Nome, CPF, E-mail) e implementa INotificavel
+namespace SistemaGestaoFaculdade.Entities {
+
+    //Aluno herda da Pessoa (Nome, CPF, E-mail) e implementa INotificavel
     internal class Aluno : Pessoa, INotificavel
     {
         public string Matricula { get; set; } = string.Empty;

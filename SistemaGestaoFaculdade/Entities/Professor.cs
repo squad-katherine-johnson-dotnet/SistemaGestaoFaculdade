@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SistemaGestaoFaculdade.Interfaces;
 
-namespace ModuloPOO.DesafioSquad.Models
-{   //Professor herda de Pessoa e também implementa a interface de notificação
+namespace SistemaGestaoFaculdade.Entities {
+    //Professor herda de Pessoa e também implementa a interface de notificação
     public class Professor : Pessoa, INotificavel
     {
         public  string Registro { get; set; } = string.Empty;

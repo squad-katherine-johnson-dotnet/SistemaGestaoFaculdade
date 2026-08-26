@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ModuloPOO.DesafioSquad.Models
-{
+﻿namespace SistemaGestaoFaculdade.Entities {
     public abstract class Pessoa
     {
         //Propriedades comuns a qualquer pessoa no sistema
