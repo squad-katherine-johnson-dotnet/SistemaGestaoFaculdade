@@ -3,7 +3,7 @@
 namespace SistemaGestaoFaculdade.Entities {
 
     //Aluno herda da Pessoa (Nome, CPF, E-mail) e implementa INotificavel
-    internal class Aluno : Pessoa, INotificavel
+    public class Aluno : Pessoa, INotificavel
     {
         public string Matricula { get; set; } = string.Empty;
 

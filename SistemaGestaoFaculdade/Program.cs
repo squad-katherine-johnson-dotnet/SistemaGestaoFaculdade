@@ -2,221 +2,230 @@
 using SistemaGestaoFaculdade.Enums;
 using SistemaGestaoFaculdade.Services;
 
-class Program {
+SistemaFaculdade sistema = new SistemaFaculdade();
 
-    static SistemaFaculdade sistema = new SistemaFaculdade();
+List<Aluno> alunos = new List<Aluno>();
+List<Professor> professores = new List<Professor>();
 
-    static List<Aluno> alunos = new List<Aluno>();
-    static List<Professor> professores = new List<Professor>();
+bool continuar = true;
 
-    static void Main(string[] args) {
-        int opcao;
-        do {
-            Console.Clear();
-            Console.WriteLine("========= SISTEMA DE GESTÃO DA FACULDADE SKJ =========");
-            Console.WriteLine("01 - Cadastrar curso");
-            Console.WriteLine("02 - Cadastrar professor");
-            Console.WriteLine("03 - Cadastrar aluno");
-            Console.WriteLine("04 - Cadastrar disciplina");
-            Console.WriteLine("05 - Realizar matrícula");
-            Console.WriteLine("06 - Lançar notas e faltas");
-            Console.WriteLine("07 - Consultar boletim");
-            Console.WriteLine("08 - Consultar pessoas");
-            Console.WriteLine("09 - Consultar cursos e disciplinas");
-            Console.WriteLine("10 - Consultar matrículas");
-            Console.WriteLine("11 - Gerar relatório geral");
-            Console.WriteLine("12 - Enviar notificação");
-            Console.WriteLine("0 - Sair");
-            Console.Write("\nEscolha uma opção: ");
+while (continuar) {
 
-            if (int.TryParse(Console.ReadLine(), out opcao)) {
-                switch (opcao) {
-                    case 01:
-                        CadastrarCurso();
-                        break;
-                    case 02:
-                        CadastrarProfessor();
-                        break;
-                    case 03:
-                        CadastrarAluno();
-                        break;
-                    case 04:
-                        Console.WriteLine("\nCadastro de disciplina.");
-                        break;
-                    case 05:
-                        Console.WriteLine("\nRealizar matrícula.");
-                        break;
-                    case 06:
-                        Console.WriteLine("\nLançar notas e faltas.");
-                        break;
-                    case 07:
-                        Console.WriteLine("\nConsultar boletim.");
-                        break;
-                    case 08:
-                        ConsultarPessoas();
-                        break;
-                    case 09:
-                        ConsultarCursos();
-                            break;
-                    case 10:
-                        Console.WriteLine("\nConsultar matrículas.");
-                        break;
-                    case 11:
-                        Console.WriteLine("\nRelatório geral.");
-                        break;
-                    case 12:
-                        Console.WriteLine("\nEnviar notificação.");
-                        break;
-                    case 0:
-                        Console.WriteLine("\nSaindo do sistema. Até logo!");
-                        break;
-                    default:
-                        Console.WriteLine("\nOpção inválida! Escolha um número de 0 a 12.");
-                        break;
-                }
-            }
-            else {
-                Console.WriteLine("\nPor favor, digite um número válido.");
-            }
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("         GESTÃO DA FACULDADE        ");
+    Console.WriteLine("====================================");
+    Console.WriteLine("1  - Cadastrar curso");
+    Console.WriteLine("2  - Cadastrar professor");
+    Console.WriteLine("3  - Cadastrar aluno");
+    Console.WriteLine("4  - Cadastrar disciplina");
+    Console.WriteLine("5  - Vincular disciplina a um curso");
+    Console.WriteLine("6  - Matricular aluno em curso");
+    Console.WriteLine("7  - Lançar nota");
+    Console.WriteLine("8  - Consultar pessoas");
+    Console.WriteLine("9  - Consultar cursos");
+    Console.WriteLine("10 - Consultar matrículas");
+    Console.WriteLine("11 - Consultar boletim");
+    Console.WriteLine("12 - Enviar notificação");
+    Console.WriteLine("0  - Sair");
+    Console.WriteLine("====================================");
 
-            if (opcao != 0) {
-                Console.WriteLine("\nPressione qualquer tecla para continuar...");
-                Console.ReadKey();//Pausa a tela até se ler a mensagem.
-            }
+    Console.Write("Digite uma opção: ");
 
-        } while (opcao != 0);//O loop continua rodando até que se digite 0 para sair.
+    if (!int.TryParse(Console.ReadLine(), out int opcao)) {
+        Console.WriteLine("Digite uma opção válida!");
+        continue;
     }
 
+    switch (opcao) {
+        case 1:
+            CadastrarCurso();
+            break;
+        case 2:
+            CadastrarProfessor();
+            break;
+        case 3:
+            CadastrarAluno();
+            break;
+        case 4:
+
+            // YASMIN
+
+            break;
+        case 5:
+
+            // YASMIN
+
+            break;
+        case 6:
+
+            // DANIELLA
+
+            break;
+        case 7:
+
+            // MARIANA
+
+            break;
+        case 8:
+            ConsultarPessoas();
+            break;
+        case 9:
+            ConsultarCursos();
+            break;
+        case 10:
+
+            // DANIELLA
+
+            break;
+        case 11:
+
+            // MARIANA
+
+            break;
+        case 12:
+
+            // GRUPO
+
+            break;
+        case 0:
+            Console.WriteLine("Sistema encerrado.");
+            continuar = false;
+            break;
+
+        default:
+            Console.WriteLine("Digite uma opção válida!");
+            break;
+    }
+}
+
+void CadastrarCurso() {
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("          Cadastro de curso         ");
+    Console.WriteLine("====================================");
 
 
-    static void CadastrarCurso() {
-        Console.WriteLine("\n============================");
-        Console.WriteLine("     Cadastro de curso      ");
-        Console.WriteLine("============================");
+    Console.Write("\nInforme o código do curso: ");
+    string codigoCurso = Console.ReadLine();
 
-        Console.Write("\nInforme o código do curso: ");
-        string codigoCurso = Console.ReadLine();
+    Console.Write("Informe o nome do curso: ");
+    string nomeCurso = Console.ReadLine();
 
-        Console.Write("Informe o nome do curso: ");
-        string nomeCurso = Console.ReadLine();
+    Console.Write("Informe o tipo do curso (1 - Graduação | 2 - Pós Graduação): ");
 
-        Console.Write("Informe o tipo do curso (1 - Graduação | 2 - Pós Graduação): ");
+    string tipoDigitado = Console.ReadLine();
 
-        string tipoDigitado = Console.ReadLine();
+    if (!int.TryParse(tipoDigitado, out int tipoSelecionado)) throw new ArgumentException("Tipo de curso informado é inválido.");
 
-        if (!int.TryParse(tipoDigitado, out int tipoSelecionado)) throw new ArgumentException("Tipo de curso informado é inválido.");
+    TipoCurso tipoCurso = (TipoCurso)tipoSelecionado;
 
-        TipoCurso tipoCurso = (TipoCurso)tipoSelecionado;
+    Curso curso = new Curso(codigoCurso, nomeCurso, tipoCurso);
 
-        Curso curso = new Curso(codigoCurso, nomeCurso, tipoCurso);
+    sistema.CadastrarCurso(curso);
+}
 
-        sistema.CadastrarCurso(curso);
+void CadastrarAluno() {
+    Console.Clear();
+    Console.WriteLine("--- Cadastro de Aluno ---");
+
+    Console.Write("Nome: ");
+    string nome = Console.ReadLine() ?? string.Empty;
+
+    Console.Write("CPF: ");
+    string cpf = Console.ReadLine() ?? string.Empty;
+
+    //Regra de negócio: Validar CPF único, sem repetição.
+    if (alunos.Any(a => a.Cpf == cpf) || professores.Any(p => p.Cpf == cpf)) {
+        Console.WriteLine("Erro: Já existe uma pessoa cadastrada com este CPF.");
+        return;
     }
 
-    static void CadastrarAluno() {
-        Console.Clear();
-        Console.WriteLine("--- Cadastro de Aluno ---");
+    Console.Write("E-mail: ");
+    string email = Console.ReadLine() ?? string.Empty;
 
-        Console.Write("Nome: ");
-        string nome = Console.ReadLine() ?? string.Empty;
+    Console.Write("Número de Matrícula: ");
+    string matricula = Console.ReadLine() ?? string.Empty;
 
-        Console.Write("CPF: ");
-        string cpf = Console.ReadLine() ?? string.Empty;
-
-        //Regra de negócio: Validar CPF único, sem repetição.
-        if (alunos.Any(a => a.Cpf == cpf) || professores.Any(p => p.Cpf == cpf)) {
-            Console.WriteLine("Erro: Já existe uma pessoa cadastrada com este CPF.");
-            return;
-        }
-
-        Console.Write("E-mail: ");
-        string email = Console.ReadLine() ?? string.Empty;
-
-        Console.Write("Número de Matrícula: ");
-        string matricula = Console.ReadLine() ?? string.Empty;
-
-        //Regra de negócio: Validar matrícula única.
-        if (alunos.Any(a => a.Matricula == matricula)) {
-            Console.WriteLine("Erro: Já existe um aluno cadastrado com este número de matrícula.");
-            return;
-        }
-
-        Aluno novoAluno = new Aluno {
-            Nome = nome,
-            Cpf = cpf,
-            Email = email,
-            Matricula = matricula
-        };
-
-        alunos.Add(novoAluno);
-        Console.WriteLine("Sucesso: Aluno cadastrado com sucesso!");
+    //Regra de negócio: Validar matrícula única.
+    if (alunos.Any(a => a.Matricula == matricula)) {
+        Console.WriteLine("Erro: Já existe um aluno cadastrado com este número de matrícula.");
+        return;
     }
 
-    static void CadastrarProfessor() {
-        Console.Clear();
-        Console.WriteLine("--- Cadastro de Professor ---");
+    Aluno novoAluno = new Aluno {
+        Nome = nome,
+        Cpf = cpf,
+        Email = email,
+        Matricula = matricula
+    };
 
-        Console.Write("Nome: ");
-        string nome = Console.ReadLine() ?? string.Empty;
+    alunos.Add(novoAluno);
+    Console.WriteLine("Sucesso: Aluno cadastrado com sucesso!");
+}
 
-        Console.Write("CPF: ");
-        string cpf = Console.ReadLine() ?? string.Empty;
+void CadastrarProfessor() {
+    Console.Clear();
+    Console.WriteLine("--- Cadastro de Professor ---");
 
-        //Regra: validar CPF único
-        if (alunos.Any(a => a.Cpf == cpf) || professores.Any(p => p.Cpf == cpf)) {
-            Console.WriteLine("Erro: Já existe uma pesssoa cadastrada com este CPF.");
-            return;
-        }
+    Console.Write("Nome: ");
+    string nome = Console.ReadLine() ?? string.Empty;
 
-        Console.Write("E-mail: ");
-        string email = Console.ReadLine() ?? string.Empty;
+    Console.Write("CPF: ");
+    string cpf = Console.ReadLine() ?? string.Empty;
 
-        Console.Write("Registro: ");
-        string registro = Console.ReadLine() ?? string.Empty;
-
-        //Regra: validar registro único do professor.
-        if (professores.Any(p => p.Registro == registro)) {
-            Console.WriteLine("Erro: Já existe um professor cadastrado com este registro.");
-            return;
-        }
-
-        Console.Write("Especialidade: ");
-        string especialidade = Console.ReadLine() ?? string.Empty;
-
-        Professor novoProfessor = new Professor {
-            Nome = nome,
-            Cpf = cpf,
-            Email = email,
-            Registro = registro,
-            Especialidade = especialidade
-        };
-
-        professores.Add(novoProfessor);
-        Console.WriteLine("Sucesso: Professor cadastrado com sucesso!");
+    //Regra: validar CPF único
+    if (alunos.Any(a => a.Cpf == cpf) || professores.Any(p => p.Cpf == cpf)) {
+        Console.WriteLine("Erro: Já existe uma pesssoa cadastrada com este CPF.");
+        return;
     }
 
-    static void ConsultarPessoas() {
-        Console.Clear();
-        Console.WriteLine("--- Consulta de Pessoas ---");
+    Console.Write("E-mail: ");
+    string email = Console.ReadLine() ?? string.Empty;
 
-        Console.WriteLine("\n=== PROFESSORES ===");
-        if (professores.Count == 0) {
-            Console.WriteLine("Nenhum professor cadastrado.");
-        }
-        else {
-            foreach (var prof in professores) {
-                prof.ExibirDados();//Uso do método polimórfico
-            }
-        }
+    Console.Write("Registro: ");
+    string registro = Console.ReadLine() ?? string.Empty;
 
-        Console.WriteLine("\n=== ALUNOS ===");
-        if (alunos.Count == 0) {
-            Console.WriteLine("Nenhum aluno cadastrado.");
+    //Regra: validar registro único do professor.
+    if (professores.Any(p => p.Registro == registro)) {
+        Console.WriteLine("Erro: Já existe um professor cadastrado com este registro.");
+        return;
+    }
+
+    Console.Write("Especialidade: ");
+    string especialidade = Console.ReadLine() ?? string.Empty;
+
+    Professor novoProfessor = new Professor {
+        Nome = nome,
+        Cpf = cpf,
+        Email = email,
+        Registro = registro,
+        Especialidade = especialidade
+    };
+
+    professores.Add(novoProfessor);
+    Console.WriteLine("Sucesso: Professor cadastrado com sucesso!");
+}
+
+void ConsultarPessoas() {
+    Console.Clear();
+    Console.WriteLine("--- Consulta de Pessoas ---");
+
+    Console.WriteLine("\n=== PROFESSORES ===");
+    if (professores.Count == 0) {
+        Console.WriteLine("Nenhum professor cadastrado.");
+    }
+    else {
+        foreach (var prof in professores) {
+            prof.ExibirDados();//Uso do método polimórfico
         }
-        else {
-            foreach (var aluno in alunos) {
-                aluno.ExibirDados();
-            }
+    }
+
+    Console.WriteLine("\n=== ALUNOS ===");
+    if (alunos.Count == 0) {
+        Console.WriteLine("Nenhum aluno cadastrado.");
+    }
+    else {
+        foreach (var aluno in alunos) {
+            aluno.ExibirDados();
         }
     }
 
@@ -229,3 +238,13 @@ class Program {
         sistema.ConsultarCursos();
     }
 }
+
+void ConsultarCursos() {
+
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("          Consultar cursos         ");
+    Console.WriteLine("====================================");
+
+    sistema.ConsultarCursos();
+}
+
