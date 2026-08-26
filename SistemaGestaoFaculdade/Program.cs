@@ -228,6 +228,15 @@ void ConsultarPessoas() {
             aluno.ExibirDados();
         }
     }
+
+    static void ConsultarCursos() {
+
+        Console.WriteLine("\n============================");
+        Console.WriteLine("      Consultar cursos      ");
+        Console.WriteLine("============================");
+
+        sistema.ConsultarCursos();
+    }
 }
 
 void ConsultarCursos() {
