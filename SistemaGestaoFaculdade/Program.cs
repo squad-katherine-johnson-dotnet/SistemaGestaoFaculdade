@@ -47,14 +47,10 @@ while (continuar) {
             CadastrarAluno();
             break;
         case 4:
-
-            // YASMIN
-
+            CadastrarDisciplina();
             break;
         case 5:
-
-            // YASMIN
-
+            VincularDisciplinaCurso();
             break;
         case 6:
 
@@ -203,6 +199,97 @@ void CadastrarProfessor() {
 
     professores.Add(novoProfessor);
     Console.WriteLine("Sucesso: Professor cadastrado com sucesso!");
+}
+
+void CadastrarDisciplina()
+{
+    Console.Clear();
+    Console.WriteLine("--- Cadastro de Disciplina ---");
+
+    Console.Write("Código: ");
+    string codigo = Console.ReadLine() ?? string.Empty;
+
+    if (sistema.Disciplinas.Any(d => d.Codigo == codigo))
+    {
+        Console.WriteLine("Erro: Já existe uma disciplina cadastrada com este código.");
+        return;
+    }
+
+    Console.Write("Nome: ");
+    string nome = Console.ReadLine() ?? string.Empty;
+
+    Console.Write("Carga horária: ");
+    if (!int.TryParse(Console.ReadLine(), out int cargaHoraria))
+    {
+        Console.WriteLine("Erro: Carga horária inválida.");
+        return;
+    }
+
+    Console.Write("Registro do professor responsável: ");
+    string registroProfessor = Console.ReadLine() ?? string.Empty;
+
+    Professor? professor = professores.FirstOrDefault(
+        p => p.Registro == registroProfessor
+    );
+
+    if (professor == null)
+    {
+        Console.WriteLine("Erro: Professor não encontrado. Cadastre o professor primeiro.");
+        return;
+    }
+
+    Disciplina novaDisciplina = new Disciplina(
+        codigo,
+        nome,
+        cargaHoraria,
+        professor
+    );
+
+    sistema.CadastrarDisciplina(novaDisciplina);
+
+    Console.WriteLine("Sucesso: Disciplina cadastrada com sucesso!");
+}
+
+void VincularDisciplinaCurso()
+{
+    Console.Clear();
+    Console.WriteLine("--- Vincular Disciplina a um Curso ---");
+
+    Console.Write("Código do curso: ");
+    string codigoCurso = Console.ReadLine() ?? string.Empty;
+
+    Curso? curso = sistema.Cursos.FirstOrDefault(
+        c => c.Codigo == codigoCurso
+    );
+
+    if (curso == null)
+    {
+        Console.WriteLine("Erro: Curso não encontrado.");
+        return;
+    }
+
+    Console.Write("Código da disciplina: ");
+    string codigoDisciplina = Console.ReadLine() ?? string.Empty;
+
+    Disciplina? disciplina = sistema.Disciplinas.FirstOrDefault(
+        d => d.Codigo == codigoDisciplina
+    );
+
+    if (disciplina == null)
+    {
+        Console.WriteLine("Erro: Disciplina não encontrada.");
+        return;
+    }
+
+    if (curso.Disciplinas.Any(d => d.Codigo == disciplina.Codigo))
+    {
+        Console.WriteLine("Erro: Essa disciplina já está vinculada a esse curso.");
+        return;
+    }
+
+    sistema.VincularDisciplinaCurso(curso, disciplina);
+
+    Console.WriteLine("Sucesso: Disciplina vinculada ao curso!");
 }
 
 void ConsultarPessoas() {
