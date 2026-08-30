@@ -337,11 +337,7 @@ void MatricularAlunoCurso()
     }
 
     // Cria a matrícula
-    Matricula novaMatricula = new Matricula(
-        aluno.Matricula,
-        aluno,
-        curso
-    );
+    Matricula novaMatricula = new Matricula(aluno, curso);
 
     // Adiciona a matrícula à lista
     matriculas.Add(novaMatricula);
@@ -411,7 +407,7 @@ void ConsultarMatriculas()
     {
         Console.WriteLine("\n------------------------------------");
         Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
-        Console.WriteLine($"Matrícula: {matricula.NumeroMatricula}");
+        Console.WriteLine($"Matrícula: {matricula.Aluno.Matricula}");
         Console.WriteLine($"Curso: {matricula.Curso.Nome}");
         Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
         Console.WriteLine("------------------------------------");
