@@ -87,26 +87,27 @@ while (continuar) {
 }
 
 void CadastrarCurso() {
+    Console.Clear();
     Console.WriteLine("\n====================================");
     Console.WriteLine("          Cadastro de curso         ");
     Console.WriteLine("====================================");
 
     try {
         Console.Write("\nInforme o código do curso: ");
-    string codigoCurso = Console.ReadLine();
+        string codigoCurso = Console.ReadLine()!;
 
-    Console.Write("Informe o nome do curso: ");
-    string nomeCurso = Console.ReadLine();
+        Console.Write("Informe o nome do curso: ");
+        string nomeCurso = Console.ReadLine()!;
 
-    Console.Write("Informe o tipo do curso (1 - Graduação | 2 - Pós Graduação): ");
+        Console.Write("Informe o tipo do curso (1 - Graduação | 2 - Pós Graduação): ");
 
-    string tipoDigitado = Console.ReadLine();
+        string tipoDigitado = Console.ReadLine()!;
 
-    if (!int.TryParse(tipoDigitado, out int tipoSelecionado)) throw new ArgumentException("Tipo de curso informado é inválido.");
+        if (!int.TryParse(tipoDigitado, out int tipoSelecionado)) throw new ArgumentException("Tipo de curso informado é inválido.");
 
-    TipoCurso tipoCurso = (TipoCurso)tipoSelecionado;
+        TipoCurso tipoCurso = (TipoCurso)tipoSelecionado;
 
-    Curso curso = new Curso(codigoCurso, nomeCurso, tipoCurso);
+        Curso curso = new Curso(codigoCurso, nomeCurso, tipoCurso);
 
         sistema.CadastrarCurso(curso);
         Console.WriteLine("Curso cadastrado com sucesso!");
@@ -117,86 +118,67 @@ void CadastrarCurso() {
     Console.ReadKey();
 }
 
-void CadastrarAluno() {
-    Console.Clear();
-    Console.WriteLine("--- Cadastro de Aluno ---");
-
-    Console.Write("Nome: ");
-    string nome = Console.ReadLine() ?? string.Empty;
-
-    Console.Write("CPF: ");
-    string cpf = Console.ReadLine() ?? string.Empty;
-
-    //Regra de negócio: Validar CPF único, sem repetição.
-    if (alunos.Any(a => a.Cpf == cpf) || professores.Any(p => p.Cpf == cpf)) {
-        Console.WriteLine("Erro: Já existe uma pessoa cadastrada com este CPF.");
-        return;
-    }
-
-    Console.Write("E-mail: ");
-    string email = Console.ReadLine() ?? string.Empty;
-
-    Console.Write("Número de Matrícula: ");
-    string matricula = Console.ReadLine() ?? string.Empty;
-
-    //Regra de negócio: Validar matrícula única.
-    if (alunos.Any(a => a.Matricula == matricula)) {
-        Console.WriteLine("Erro: Já existe um aluno cadastrado com este número de matrícula.");
-        return;
-    }
-
-    Aluno novoAluno = new Aluno {
-        Nome = nome,
-        Cpf = cpf,
-        Email = email,
-        Matricula = matricula
-    };
-
-    alunos.Add(novoAluno);
-    Console.WriteLine("Sucesso: Aluno cadastrado com sucesso!");
-}
-
 void CadastrarProfessor() {
     Console.Clear();
-    Console.WriteLine("--- Cadastro de Professor ---");
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("       Cadastro de Professor        ");
+    Console.WriteLine("====================================");
 
-    Console.Write("Nome: ");
-    string nome = Console.ReadLine() ?? string.Empty;
+    try {
+        Console.Write("Nome: ");
+        string nome = Console.ReadLine() ?? string.Empty;
 
-    Console.Write("CPF: ");
-    string cpf = Console.ReadLine() ?? string.Empty;
+        Console.Write("CPF: ");
+        string cpf = Console.ReadLine() ?? string.Empty;
 
-    //Regra: validar CPF único
-    if (alunos.Any(a => a.Cpf == cpf) || professores.Any(p => p.Cpf == cpf)) {
-        Console.WriteLine("Erro: Já existe uma pesssoa cadastrada com este CPF.");
-        return;
+        Console.Write("E-mail: ");
+        string email = Console.ReadLine() ?? string.Empty;
+
+        Console.Write("Registro: ");
+        string registro = Console.ReadLine() ?? string.Empty;
+
+        Console.Write("Especialidade: ");
+        string especialidade = Console.ReadLine() ?? string.Empty;
+
+        Professor novoProfessor = new Professor(nome, cpf, email, registro, especialidade);
+
+        sistema.CadastrarProfessor(novoProfessor);
+        Console.WriteLine("Professor cadastrado com sucesso!");
     }
-
-    Console.Write("E-mail: ");
-    string email = Console.ReadLine() ?? string.Empty;
-
-    Console.Write("Registro: ");
-    string registro = Console.ReadLine() ?? string.Empty;
-
-    //Regra: validar registro único do professor.
-    if (professores.Any(p => p.Registro == registro)) {
-        Console.WriteLine("Erro: Já existe um professor cadastrado com este registro.");
-        return;
+    catch (ArgumentException ex) {
+        Console.WriteLine($"Erro: {ex.Message}");
     }
+    Console.ReadKey();
+}
 
-    Console.Write("Especialidade: ");
-    string especialidade = Console.ReadLine() ?? string.Empty;
+void CadastrarAluno() {
+    Console.Clear();
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("         Cadastro de Aluno          ");
+    Console.WriteLine("====================================");
 
-    Professor novoProfessor = new Professor {
-        Nome = nome,
-        Cpf = cpf,
-        Email = email,
-        Registro = registro,
-        Especialidade = especialidade
-    };
+    try {
+        Console.Write("Nome: ");
+        string nome = Console.ReadLine() ?? string.Empty;
 
-    professores.Add(novoProfessor);
-    Console.WriteLine("Sucesso: Professor cadastrado com sucesso!");
+        Console.Write("CPF: ");
+        string cpf = Console.ReadLine() ?? string.Empty;
+
+        Console.Write("E-mail: ");
+        string email = Console.ReadLine() ?? string.Empty;
+
+        Console.Write("Número de Matrícula: ");
+        string matricula = Console.ReadLine() ?? string.Empty;
+
+        Aluno novoAluno = new Aluno(nome, cpf, email, matricula);
+
+        sistema.CadastrarAluno(novoAluno);
+        Console.WriteLine("Aluno cadastrado com sucesso!");
+    }
+    catch (ArgumentException ex) {
+        Console.WriteLine($"Erro: {ex.Message}");
+    }
+    Console.ReadKey();
 }
 
 void CadastrarDisciplina() {
@@ -541,24 +523,21 @@ void ConsultarBoletim() {
 
     Console.WriteLine("------------------------------------");
 }
-void EnviarNotificacao()
-{
+void EnviarNotificacao() {
     Console.Clear();
     Console.WriteLine("--- Enviar Notificação ---");
     Console.WriteLine("1 - Aluno");
     Console.WriteLine("2 - Professor");
     Console.Write("Escolha o destinatário: ");
 
-    if (!int.TryParse(Console.ReadLine(), out int tipoDestinatario))
-    {
+    if (!int.TryParse(Console.ReadLine(), out int tipoDestinatario)) {
         Console.WriteLine("Opção inválida.");
         return;
     }
 
     INotificavel? destinatario = null;
 
-    if (tipoDestinatario == 1)
-    {
+    if (tipoDestinatario == 1) {
         Console.Write("Digite a matrícula do aluno: ");
         string numeroMatricula =
             Console.ReadLine()?.Trim() ?? string.Empty;
@@ -570,14 +549,12 @@ void EnviarNotificacao()
             )
         );
 
-        if (destinatario is null)
-        {
+        if (destinatario is null) {
             Console.WriteLine("Aluno não encontrado.");
             return;
         }
     }
-    else if (tipoDestinatario == 2)
-    {
+    else if (tipoDestinatario == 2) {
         Console.Write("Digite o registro do professor: ");
         string registroProfessor =
             Console.ReadLine()?.Trim() ?? string.Empty;
@@ -589,14 +566,12 @@ void EnviarNotificacao()
             )
         );
 
-        if (destinatario is null)
-        {
+        if (destinatario is null) {
             Console.WriteLine("Professor não encontrado.");
             return;
         }
     }
-    else
-    {
+    else {
         Console.WriteLine("Opção inválida.");
         return;
     }
@@ -604,8 +579,7 @@ void EnviarNotificacao()
     Console.Write("Digite a mensagem: ");
     string mensagem = Console.ReadLine()?.Trim() ?? string.Empty;
 
-    if (string.IsNullOrWhiteSpace(mensagem))
-    {
+    if (string.IsNullOrWhiteSpace(mensagem)) {
         Console.WriteLine("A mensagem não pode ficar vazia.");
         return;
     }
