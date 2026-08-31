@@ -1,60 +1,118 @@
-﻿using SistemaGestaoFaculdade.Entities;
+﻿using Microsoft.Win32;
+using SistemaGestaoFaculdade.Entities;
 using SistemaGestaoFaculdade.Enums;
+using System.Runtime.Intrinsics.X86;
 
-namespace SistemaGestaoFaculdade.Services
-{
-    public class SistemaFaculdade
-    {
+namespace SistemaGestaoFaculdade.Services {
+    public class SistemaFaculdade {
 
         public List<Curso> Cursos { get; set; } = new();
         public List<Disciplina> Disciplinas { get; set; } = new();
         public List<Aluno> Alunos { get; set; } = new();
         public List<Professor> Professores { get; set; } = new();
+        public List<Matricula> Matriculas { get; set; } = new();
 
-        public void CadastrarCurso(Curso curso)
-        {
-
-            if (Cursos.Any(x => x.Codigo == curso.Codigo)) throw new ArgumentException("Já existe um curso cadastrado com esse código!");
+        public void CadastrarCurso(Curso curso) {
+            if (Cursos.Any(x => x.Codigo == curso.Codigo)) throw new ArgumentException("Já existe um curso cadastrado com esse código.");
 
             Cursos.Add(curso);
         }
 
-        public void CadastrarDisciplina(Disciplina disciplina)
-        {
-            if (Disciplinas.Any(x => x.Codigo == disciplina.Codigo))
-                throw new ArgumentException("Já existe uma disciplina cadastrada com esse código");
+        public void CadastrarProfessor(Professor professor) {
+
+            if (Alunos.Any(a => a.Cpf == professor.Cpf) || Professores.Any(p => p.Cpf == professor.Cpf)) throw new ArgumentException("Já existe uma pesssoa cadastrada com este CPF.");
+
+            if (Professores.Any(p => p.Registro == professor.Registro)) throw new ArgumentException("Já existe um professor cadastrado com este registro.");
+
+            Professores.Add(professor);
+        }
+
+        public void CadastrarAluno(Aluno aluno) {
+
+            if (Alunos.Any(a => a.Cpf == aluno.Cpf) || Professores.Any(p => p.Cpf == aluno.Cpf)) throw new ArgumentException("Já existe uma pesssoa cadastrada com este CPF.");
+
+            if (Alunos.Any(a => a.Matricula == aluno.Matricula)) throw new ArgumentException("Já existe um aluno cadastrado com este número de matrícula.");
+
+            Alunos.Add(aluno);
+        }
+
+        public Professor BuscarProfessorPorRegistro(string registro) {
+
+            Professor? professor = Professores.FirstOrDefault(p => p.Registro == registro);
+
+            if (professor == null) throw new ArgumentException("Professor não encontrado. Cadastre o professor primeiro.");
+
+            return professor;
+        }
+
+        public void CadastrarDisciplina(Disciplina disciplina) {
+            if (Disciplinas.Any(x => x.Codigo == disciplina.Codigo)) throw new ArgumentException("Já existe uma disciplina cadastrada com esse código");
 
             Disciplinas.Add(disciplina);
         }
 
-        public void VincularDisciplinaCurso(Curso curso, Disciplina disciplina)
-        {
-            if (curso.Disciplinas.Any(x => x.Codigo == disciplina.Codigo))
-                throw new ArgumentException("Essa disciplina já está vinculada a esse curso");
+        public Curso BuscarCursoPorCodigo(string codigo) {
+            Curso? curso = Cursos.FirstOrDefault(c => c.Codigo == codigo.Trim().ToUpper());
+
+            if (curso == null) throw new ArgumentException("Curso não encontrado.");
+
+            return curso;
+        }
+
+        public Disciplina BuscarDisciplinaPorCodigo(string codigo) {
+            Disciplina? disciplina = Disciplinas.FirstOrDefault(d => d.Codigo == codigo.Trim().ToUpper());
+
+            if (disciplina == null) throw new ArgumentException("Disciplina não encontrada.");
+
+            return disciplina;
+        }
+
+        public void VincularDisciplinaCurso(Curso curso, Disciplina disciplina) {
+            if (curso.Disciplinas.Any(x => x.Codigo == disciplina.Codigo)) throw new ArgumentException("Essa disciplina já está vinculada a esse curso");
 
             curso.Disciplinas.Add(disciplina);
         }
 
-        public void ConsultarCursos()
-        {
+        public Aluno BuscarAlunoPorMatricula(string matricula) {
+            Aluno? aluno = Alunos.FirstOrDefault(a => a.Matricula == matricula);
 
-            foreach (var curso in Cursos)
-            {
+            if (aluno == null) throw new ArgumentException("Aluno não encontrado.");
 
-                Console.WriteLine("\n-------------- Curso --------------");
-                Console.WriteLine($"Nome: {curso.Nome.ToUpper()} - {curso.Codigo.ToUpper()}");
-                Console.WriteLine($"Tipo: {(curso.Tipo == TipoCurso.Graduacao ? "Graduação" : "Pós-Graduação")}");
+            return aluno;
+        }
 
-                /*
+        public void MatricularAlunoCurso(Aluno aluno, Curso curso) {
+            bool jaMatriculado = Matriculas.Any(m => m.Aluno.Matricula == aluno.Matricula && m.Curso.Codigo == curso.Codigo);
 
-                Console.WriteLine("\nDisciplinas:");
+            if (jaMatriculado) throw new ArgumentException("Este aluno já está matriculado neste curso.");
 
-                IMPLEMENTAR APÓS ESQUELETO!!!
+            Matricula novaMatricula = new Matricula(aluno, curso);
 
-                Console.WriteLine("\nAlunos matriculados:");
+            Matriculas.Add(novaMatricula);
+        }
 
-                */
-            }
+        public Matricula BuscarMatricula(string numeroMatricula, string codigoCurso) {
+
+            Matricula? matricula = Matriculas.FirstOrDefault(m => m.Aluno.Matricula.Equals(numeroMatricula, StringComparison.OrdinalIgnoreCase) && m.Curso.Codigo.Equals(codigoCurso, StringComparison.OrdinalIgnoreCase));
+
+            if (matricula is null) throw new ArgumentException("Matrícula não encontrada para esse aluno e curso.");
+
+            return matricula;
+        }
+
+        public Disciplina BuscarDisciplinaDoCurso(Matricula matricula, string codigoDisciplina) {
+
+            Disciplina? disciplina = matricula.Curso.Disciplinas.FirstOrDefault(d => d.Codigo.Equals(codigoDisciplina, StringComparison.OrdinalIgnoreCase));
+
+            if (disciplina is null) throw new ArgumentException("A disciplina não pertence ao curso da matrícula.");
+
+            return disciplina;
+        }
+
+        public void LancarNota(Matricula matricula, Disciplina disciplina, double valor) {
+            Nota nota = new Nota(disciplina, valor);
+
+            matricula.Boletim.AdicionarNota(nota);
         }
     }
 }
