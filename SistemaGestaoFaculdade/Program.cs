@@ -6,6 +6,7 @@ SistemaFaculdade sistema = new SistemaFaculdade();
 
 List<Aluno> alunos = new List<Aluno>();
 List<Professor> professores = new List<Professor>();
+List<Matricula> matriculas = new List<Matricula>();
 
 bool continuar = true;
 
@@ -53,9 +54,7 @@ while (continuar) {
             VincularDisciplinaCurso();
             break;
         case 6:
-
-            // DANIELLA
-
+            MatricularAlunoCurso();
             break;
         case 7:
 
@@ -69,9 +68,7 @@ while (continuar) {
             ConsultarCursos();
             break;
         case 10:
-
-            // DANIELLA
-
+            ConsultarMatriculas();
             break;
         case 11:
 
@@ -292,6 +289,70 @@ void VincularDisciplinaCurso()
     Console.WriteLine("Sucesso: Disciplina vinculada ao curso!");
 }
 
+void MatricularAlunoCurso()
+{
+    Console.Clear();
+    Console.WriteLine("--- Matrícula de Aluno em Curso ---");
+
+    // Selecionar aluno
+    Console.Write("Digite o número de matrícula do aluno: ");
+    string numeroMatricula = Console.ReadLine() ?? string.Empty;
+
+    Aluno? aluno = alunos.FirstOrDefault(
+        a => a.Matricula == numeroMatricula
+    );
+
+    // Regra: o aluno deve existir
+    if (aluno == null)
+    {
+        Console.WriteLine("Erro: Aluno não encontrado.");
+        return;
+    }
+
+    // Selecionar curso
+    Console.Write("Digite o código do curso: ");
+    string codigoCurso = Console.ReadLine() ?? string.Empty;
+
+    Curso? curso = sistema.Cursos.FirstOrDefault(
+        c => c.Codigo == codigoCurso
+    );
+
+    // Regra: o curso deve existir
+    if (curso == null)
+    {
+        Console.WriteLine("Erro: Curso não encontrado.");
+        return;
+    }
+
+    // Regra: aluno não pode ser matriculado duas vezes no mesmo curso
+    bool jaMatriculado = matriculas.Any(
+        m => m.Aluno.Matricula == aluno.Matricula &&
+             m.Curso.Codigo == curso.Codigo
+    );
+
+    if (jaMatriculado)
+    {
+        Console.WriteLine("Erro: Este aluno já está matriculado neste curso.");
+        return;
+    }
+
+    // Cria a matrícula
+    Matricula novaMatricula = new Matricula(aluno, curso);
+
+    // Adiciona a matrícula à lista
+    matriculas.Add(novaMatricula);
+
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("     MATRÍCULA REALIZADA COM SUCESSO");
+    Console.WriteLine("====================================");
+    Console.WriteLine($"Aluno: {aluno.Nome}");
+    Console.WriteLine($"Matrícula: {aluno.Matricula}");
+    Console.WriteLine($"Curso: {curso.Nome}");
+    Console.WriteLine($"Tipo: {curso.Tipo}");
+    Console.WriteLine("Boletim criado automaticamente!");
+    Console.WriteLine("====================================");
+}
+ 
 void ConsultarPessoas() {
     Console.Clear();
     Console.WriteLine("--- Consulta de Pessoas ---");
@@ -328,3 +389,27 @@ void ConsultarCursos() {
     sistema.ConsultarCursos();
 }
 
+void ConsultarMatriculas()
+{
+    Console.Clear();
+
+    Console.WriteLine("--- Consultar Matrículas ---");
+
+    // Verifica se existem matrículas cadastradas
+    if (matriculas.Count == 0)
+    {
+        Console.WriteLine("Nenhuma matrícula cadastrada.");
+        return;
+    }
+
+    // Percorre todas as matrículas
+    foreach (var matricula in matriculas)
+    {
+        Console.WriteLine("\n------------------------------------");
+        Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
+        Console.WriteLine($"Matrícula: {matricula.Aluno.Matricula}");
+        Console.WriteLine($"Curso: {matricula.Curso.Nome}");
+        Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
+        Console.WriteLine("------------------------------------");
+    }
+}
