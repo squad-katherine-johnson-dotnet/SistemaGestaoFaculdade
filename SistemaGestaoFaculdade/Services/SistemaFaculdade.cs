@@ -10,6 +10,7 @@ namespace SistemaGestaoFaculdade.Services {
         public List<Disciplina> Disciplinas { get; set; } = new();
         public List<Aluno> Alunos { get; set; } = new();
         public List<Professor> Professores { get; set; } = new();
+        public List<Matricula> Matriculas { get; set; } = new();
 
         public void CadastrarCurso(Curso curso) {
             if (Cursos.Any(x => x.Codigo == curso.Codigo)) throw new ArgumentException("Já existe um curso cadastrado com esse código.");
@@ -67,12 +68,27 @@ namespace SistemaGestaoFaculdade.Services {
         }
 
         public void VincularDisciplinaCurso(Curso curso, Disciplina disciplina) {
-            if (curso.Disciplinas.Any(x => x.Codigo == disciplina.Codigo))
-                throw new ArgumentException("Essa disciplina já está vinculada a esse curso");
+            if (curso.Disciplinas.Any(x => x.Codigo == disciplina.Codigo)) throw new ArgumentException("Essa disciplina já está vinculada a esse curso");
 
             curso.Disciplinas.Add(disciplina);
         }
 
+        public Aluno BuscarAlunoPorMatricula(string matricula) {
+            Aluno? aluno = Alunos.FirstOrDefault(a => a.Matricula == matricula);
+
+            if (aluno == null) throw new ArgumentException("Aluno não encontrado.");
+
+            return aluno;
+        }
+        public void MatricularAlunoCurso(Aluno aluno, Curso curso) {
+            bool jaMatriculado = Matriculas.Any(m => m.Aluno.Matricula == aluno.Matricula && m.Curso.Codigo == curso.Codigo);
+
+            if (jaMatriculado) throw new ArgumentException("Este aluno já está matriculado neste curso.");
+
+            Matricula novaMatricula = new Matricula(aluno, curso);
+
+            Matriculas.Add(novaMatricula);
+        }
         public void ConsultarCursos() {
 
             foreach (var curso in Cursos) {

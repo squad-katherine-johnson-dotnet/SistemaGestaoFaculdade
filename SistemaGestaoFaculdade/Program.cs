@@ -244,62 +244,34 @@ void VincularDisciplinaCurso() {
 
 void MatricularAlunoCurso() {
     Console.Clear();
-    Console.WriteLine("--- Matrícula de Aluno em Curso ---");
-
-    // Selecionar aluno
-    Console.Write("Digite o número de matrícula do aluno: ");
-    string numeroMatricula = Console.ReadLine() ?? string.Empty;
-
-    Aluno? aluno = alunos.FirstOrDefault(
-        a => a.Matricula == numeroMatricula
-    );
-
-    // Regra: o aluno deve existir
-    if (aluno == null) {
-        Console.WriteLine("Erro: Aluno não encontrado.");
-        return;
-    }
-
-    // Selecionar curso
-    Console.Write("Digite o código do curso: ");
-    string codigoCurso = Console.ReadLine() ?? string.Empty;
-
-    Curso? curso = sistema.Cursos.FirstOrDefault(
-        c => c.Codigo == codigoCurso
-    );
-
-    // Regra: o curso deve existir
-    if (curso == null) {
-        Console.WriteLine("Erro: Curso não encontrado.");
-        return;
-    }
-
-    // Regra: aluno não pode ser matriculado duas vezes no mesmo curso
-    bool jaMatriculado = matriculas.Any(
-        m => m.Aluno.Matricula == aluno.Matricula &&
-             m.Curso.Codigo == curso.Codigo
-    );
-
-    if (jaMatriculado) {
-        Console.WriteLine("Erro: Este aluno já está matriculado neste curso.");
-        return;
-    }
-
-    // Cria a matrícula
-    Matricula novaMatricula = new Matricula(aluno, curso);
-
-    // Adiciona a matrícula à lista
-    matriculas.Add(novaMatricula);
-
     Console.WriteLine("\n====================================");
-    Console.WriteLine("     MATRÍCULA REALIZADA COM SUCESSO");
+    Console.WriteLine("      Matricular Aluno em Curso     ");
     Console.WriteLine("====================================");
-    Console.WriteLine($"Aluno: {aluno.Nome}");
-    Console.WriteLine($"Matrícula: {aluno.Matricula}");
-    Console.WriteLine($"Curso: {curso.Nome}");
-    Console.WriteLine($"Tipo: {curso.Tipo}");
-    Console.WriteLine("Boletim criado automaticamente!");
-    Console.WriteLine("====================================");
+
+    try {
+        Console.Write("Digite o número de matrícula do aluno: ");
+        string numeroMatricula = Console.ReadLine() ?? string.Empty;
+
+        Aluno aluno = sistema.BuscarAlunoPorMatricula(numeroMatricula);
+
+        Console.Write("Digite o código do curso: ");
+        string codigoCurso = Console.ReadLine() ?? string.Empty;
+
+        Curso curso = sistema.BuscarCursoPorCodigo(codigoCurso);
+
+        sistema.MatricularAlunoCurso(aluno, curso);
+
+        Console.WriteLine("Matrícula realizada com sucesso!");
+        Console.WriteLine($"Aluno: {aluno.Nome}");
+        Console.WriteLine($"Matrícula: {aluno.Matricula}");
+        Console.WriteLine($"Curso: {curso.Nome}");
+        Console.WriteLine($"Tipo: {curso.Tipo}");
+        Console.WriteLine("Boletim criado automaticamente!");
+    }
+    catch (ArgumentException ex) {
+        Console.WriteLine($"Erro: {ex.Message}");
+    }
+    Console.ReadKey();
 }
 
 void ConsultarPessoas() {
