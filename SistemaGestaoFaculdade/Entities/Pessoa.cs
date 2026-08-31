@@ -10,7 +10,7 @@
             ValidarCpf(cpf);
             ValidarEmail(email);
 
-            Nome = nome.Trim();
+            Nome = nome.Trim().ToUpper();
             Cpf = cpf.Trim();
             Email = email.Trim();
         }

@@ -262,10 +262,10 @@ void MatricularAlunoCurso() {
         sistema.MatricularAlunoCurso(aluno, curso);
 
         Console.WriteLine("Matrícula realizada com sucesso!");
-        Console.WriteLine($"Aluno: {aluno.Nome}");
+        Console.WriteLine($"\nAluno: {aluno.Nome}");
         Console.WriteLine($"Matrícula: {aluno.Matricula}");
-        Console.WriteLine($"Curso: {curso.Nome}");
-        Console.WriteLine($"Tipo: {curso.Tipo}");
+        Console.WriteLine($"Curso: {curso.Nome.ToUpper()}");
+        Console.WriteLine($"Tipo: {(curso.Tipo == TipoCurso.Graduacao ? "Graduação" : "Pós-Graduação")}");
         Console.WriteLine("Boletim criado automaticamente!");
     }
     catch (ArgumentException ex) {
