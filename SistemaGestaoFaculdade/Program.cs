@@ -309,7 +309,43 @@ void ConsultarCursos() {
     Console.WriteLine("          Consultar cursos         ");
     Console.WriteLine("====================================");
 
-    sistema.ConsultarCursos();
+    if (!sistema.Cursos.Any()) {
+        Console.WriteLine("Nenhum curso cadastrado.");
+        return;
+    }
+
+    foreach (var curso in sistema.Cursos) {
+
+        Console.WriteLine("\n-------------- Curso ---------------");
+        Console.WriteLine($"Nome: {curso.Nome.ToUpper()} - {curso.Codigo.ToUpper()}");
+        Console.WriteLine($"Tipo: {(curso.Tipo == TipoCurso.Graduacao ? "Graduação" : "Pós-Graduação")}");
+
+        Console.WriteLine("\nDisciplinas:");
+
+        if (!curso.Disciplinas.Any()) {
+            Console.WriteLine("Nenhuma disciplina vinculada.");
+        }
+        else {
+            foreach (var disciplina in curso.Disciplinas) {
+                Console.WriteLine(disciplina.Nome);
+                Console.WriteLine($"Professor(a): {disciplina.ProfessorResponsavel.Nome}");
+            }
+        }
+
+        Console.WriteLine("\nAlunos matriculados:");
+
+        var matriculasDoCurso = sistema.Matriculas.Where(m => m.Curso.Codigo == curso.Codigo);
+
+        if (!matriculasDoCurso.Any()) {
+            Console.WriteLine("Nenhum aluno matriculado.");
+        }
+        else {
+            foreach (var matricula in matriculasDoCurso) {
+                Console.WriteLine(matricula.Aluno.Nome.ToUpper());
+                Console.WriteLine($"Matrícula: {matricula.Aluno.Matricula}");
+            }
+        }
+    }
 }
 
 void ConsultarMatriculas() {

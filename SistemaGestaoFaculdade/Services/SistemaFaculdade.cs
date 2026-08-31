@@ -89,28 +89,5 @@ namespace SistemaGestaoFaculdade.Services {
 
             Matriculas.Add(novaMatricula);
         }
-        public void ConsultarCursos() {
-
-            foreach (var curso in Cursos) {
-
-                Console.WriteLine("\n-------------- Curso ---------------");
-                Console.WriteLine($"Nome: {curso.Nome.ToUpper()} - {curso.Codigo.ToUpper()}");
-                Console.WriteLine($"Tipo: {(curso.Tipo == TipoCurso.Graduacao ? "Graduação" : "Pós-Graduação")}");
-
-                Console.WriteLine("\nDisciplinas:");
-                foreach (var disciplina in curso.Disciplinas) {
-                    Console.WriteLine(disciplina.Nome);
-                    Console.WriteLine($"Professor(a): {disciplina.ProfessorResponsavel}");
-                }
-
-                /*
-                Console.WriteLine("\nAlunos matriculados:");
-                foreach (var disciplina in curso.Disciplinas) {
-                    Console.WriteLine(disciplina.Nome);
-                    Console.WriteLine($"Professor(a): {disciplina.ProfessorResponsavel}");
-                }
-                */
-            }
-        }
     }
 }

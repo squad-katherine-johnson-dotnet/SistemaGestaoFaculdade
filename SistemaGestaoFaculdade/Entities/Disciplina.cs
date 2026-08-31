@@ -13,7 +13,7 @@
             ValidarProfessor(professorResponsavel);
 
             Codigo = codigo.Trim().ToUpper();
-            Nome = nome.Trim();
+            Nome = nome.Trim().ToUpper();
             CargaHoraria = cargaHoraria;
             ProfessorResponsavel = professorResponsavel;
         }
