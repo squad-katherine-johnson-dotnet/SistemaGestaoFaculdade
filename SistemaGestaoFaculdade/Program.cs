@@ -1,6 +1,7 @@
 ﻿using SistemaGestaoFaculdade.Entities;
 using SistemaGestaoFaculdade.Enums;
 using SistemaGestaoFaculdade.Services;
+using SistemaGestaoFaculdade.Interfaces;
 
 SistemaFaculdade sistema = new SistemaFaculdade();
 
@@ -72,9 +73,7 @@ while (continuar) {
             ConsultarBoletim();
             break;
         case 12:
-
-            // GRUPO
-
+            EnviarNotificacao();
             break;
         case 0:
             Console.WriteLine("Sistema encerrado.");
@@ -564,4 +563,76 @@ void ConsultarBoletim()
     }
 
     Console.WriteLine("------------------------------------");
+}
+void EnviarNotificacao()
+{
+    Console.Clear();
+    Console.WriteLine("--- Enviar Notificação ---");
+    Console.WriteLine("1 - Aluno");
+    Console.WriteLine("2 - Professor");
+    Console.Write("Escolha o destinatário: ");
+
+    if (!int.TryParse(Console.ReadLine(), out int tipoDestinatario))
+    {
+        Console.WriteLine("Opção inválida.");
+        return;
+    }
+
+    INotificavel? destinatario = null;
+
+    if (tipoDestinatario == 1)
+    {
+        Console.Write("Digite a matrícula do aluno: ");
+        string numeroMatricula =
+            Console.ReadLine()?.Trim() ?? string.Empty;
+
+        destinatario = alunos.FirstOrDefault(a =>
+            a.Matricula.Equals(
+                numeroMatricula,
+                StringComparison.OrdinalIgnoreCase
+            )
+        );
+
+        if (destinatario is null)
+        {
+            Console.WriteLine("Aluno não encontrado.");
+            return;
+        }
+    }
+    else if (tipoDestinatario == 2)
+    {
+        Console.Write("Digite o registro do professor: ");
+        string registroProfessor =
+            Console.ReadLine()?.Trim() ?? string.Empty;
+
+        destinatario = professores.FirstOrDefault(p =>
+            p.Registro.Equals(
+                registroProfessor,
+                StringComparison.OrdinalIgnoreCase
+            )
+        );
+
+        if (destinatario is null)
+        {
+            Console.WriteLine("Professor não encontrado.");
+            return;
+        }
+    }
+    else
+    {
+        Console.WriteLine("Opção inválida.");
+        return;
+    }
+
+    Console.Write("Digite a mensagem: ");
+    string mensagem = Console.ReadLine()?.Trim() ?? string.Empty;
+
+    if (string.IsNullOrWhiteSpace(mensagem))
+    {
+        Console.WriteLine("A mensagem não pode ficar vazia.");
+        return;
+    }
+
+    destinatario.ReceberNotificacao(mensagem);
+    Console.WriteLine("Notificação enviada com sucesso!");
 }
