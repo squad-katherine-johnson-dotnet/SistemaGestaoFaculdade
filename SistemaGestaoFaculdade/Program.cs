@@ -6,10 +6,6 @@ using SistemaGestaoFaculdade.Services;
 
 SistemaFaculdade sistema = new SistemaFaculdade();
 
-List<Aluno> alunos = new List<Aluno>();
-List<Professor> professores = new List<Professor>();
-List<Matricula> matriculas = new List<Matricula>();
-
 bool continuar = true;
 
 while (continuar) {
@@ -304,9 +300,9 @@ void ConsultarPessoas() {
 }
 
 void ConsultarCursos() {
-
+    Console.Clear();
     Console.WriteLine("\n====================================");
-    Console.WriteLine("          Consultar cursos         ");
+    Console.WriteLine("          Consultar Cursos         ");
     Console.WriteLine("====================================");
 
     if (!sistema.Cursos.Any()) {
@@ -345,115 +341,94 @@ void ConsultarCursos() {
                 Console.WriteLine($"Matrícula: {matricula.Aluno.Matricula}");
             }
         }
+        Console.WriteLine("------------------------------------");
     }
 }
 
 void ConsultarMatriculas() {
     Console.Clear();
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("        Consultar Matrículas        ");
+    Console.WriteLine("====================================");
 
-    Console.WriteLine("--- Consultar Matrículas ---");
-
-    // Verifica se existem matrículas cadastradas
-    if (matriculas.Count == 0) {
+    if (sistema.Matriculas.Count == 0) {
         Console.WriteLine("Nenhuma matrícula cadastrada.");
         return;
     }
 
-    // Percorre todas as matrículas
-    foreach (var matricula in matriculas) {
-        Console.WriteLine("\n------------------------------------");
-        Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
+    foreach (var matricula in sistema.Matriculas) {
+        Console.WriteLine("------------------------------------");
+        Console.WriteLine($"Aluno: {matricula.Aluno.Nome.ToUpper()}");
         Console.WriteLine($"Matrícula: {matricula.Aluno.Matricula}");
-        Console.WriteLine($"Curso: {matricula.Curso.Nome}");
-        Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
+        Console.WriteLine($"Curso: {matricula.Curso.Nome.ToUpper()}");
+        Console.WriteLine($"Tipo: {(matricula.Curso.Tipo == TipoCurso.Graduacao ? "Graduação" : "Pós-Graduação")}");
         Console.WriteLine("------------------------------------");
     }
 }
 
 void LancarNota() {
     Console.Clear();
-    Console.WriteLine("--- Lançar Nota ---");
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("            Lançar nota             ");
+    Console.WriteLine("====================================");
 
-    if (matriculas.Count == 0) {
+    if (sistema.Matriculas.Count == 0) {
         Console.WriteLine("Nenhuma matrícula cadastrada.");
         return;
     }
 
-    Console.Write("Digite a matrícula do aluno: ");
-    string numeroMatricula = Console.ReadLine()?.Trim() ?? string.Empty;
-
-    Console.Write("Digite o código do curso: ");
-    string codigoCurso = Console.ReadLine()?.Trim() ?? string.Empty;
-
-    Matricula? matricula = matriculas.FirstOrDefault(m =>
-        m.Aluno.Matricula.Equals(
-            numeroMatricula,
-            StringComparison.OrdinalIgnoreCase
-        ) &&
-        m.Curso.Codigo.Equals(
-            codigoCurso,
-            StringComparison.OrdinalIgnoreCase
-        )
-    );
-
-    if (matricula is null) {
-        Console.WriteLine("Matrícula não encontrada para esse aluno e curso.");
-        return;
-    }
-
-    if (matricula.Curso.Disciplinas.Count == 0) {
-        Console.WriteLine("Esse curso ainda não possui disciplinas vinculadas.");
-        return;
-    }
-
-    Console.WriteLine("\nDisciplinas do curso:");
-
-    foreach (Disciplina item in matricula.Curso.Disciplinas) {
-        Console.WriteLine($"{item.Codigo} - {item.Nome}");
-    }
-
-    Console.Write("\nDigite o código da disciplina: ");
-    string codigoDisciplina = Console.ReadLine()?.Trim() ?? string.Empty;
-
-    Disciplina? disciplina = matricula.Curso.Disciplinas.FirstOrDefault(d =>
-        d.Codigo.Equals(
-            codigoDisciplina,
-            StringComparison.OrdinalIgnoreCase
-        )
-    );
-
-    if (disciplina is null) {
-        Console.WriteLine("A disciplina não pertence ao curso da matrícula.");
-        return;
-    }
-
-    Console.Write("Digite a nota entre 0 e 10: ");
-
-    if (!double.TryParse(Console.ReadLine(), out double valor)) {
-        Console.WriteLine("Digite uma nota válida.");
-        return;
-    }
-
     try {
-        Nota nota = new Nota(disciplina, valor);
-        matricula.Boletim.AdicionarNota(nota);
+        Console.Write("Digite a matrícula do aluno: ");
+        string numeroMatricula = Console.ReadLine()?.Trim() ?? string.Empty;
+
+        Console.Write("Digite o código do curso: ");
+        string codigoCurso = Console.ReadLine()?.Trim() ?? string.Empty;
+
+        Matricula matricula = sistema.BuscarMatricula(numeroMatricula, codigoCurso);
+
+        if (matricula.Curso.Disciplinas.Count == 0) {
+            Console.WriteLine("Esse curso ainda não possui disciplinas vinculadas.");
+            return;
+        }
+
+        Console.WriteLine("\nDisciplinas do curso:");
+
+        foreach (Disciplina item in matricula.Curso.Disciplinas) {
+            Console.WriteLine($"{item.Codigo} - {item.Nome}");
+        }
+
+        Console.Write("\nDigite o código da disciplina: ");
+        string codigoDisciplina = Console.ReadLine()?.Trim() ?? string.Empty;
+
+        Disciplina disciplina = sistema.BuscarDisciplinaDoCurso(matricula, codigoDisciplina);
+
+        Console.Write("Digite a nota entre 0 e 10: ");
+
+        if (!double.TryParse(Console.ReadLine(), out double valor)) {
+            Console.WriteLine("Digite uma nota válida.");
+            return;
+        }
+
+        sistema.LancarNota(matricula, disciplina, valor);
 
         Console.WriteLine("\nNota lançada com sucesso!");
         Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
         Console.WriteLine($"Curso: {matricula.Curso.Nome}");
         Console.WriteLine($"Disciplina: {disciplina.Nome}");
         Console.WriteLine($"Nota: {valor:F1}");
+
     }
     catch (ArgumentException ex) {
         Console.WriteLine($"Erro: {ex.Message}");
     }
+    Console.ReadKey();
 }
 
 void ConsultarBoletim() {
     Console.Clear();
     Console.WriteLine("--- Consultar Boletim ---");
 
-    if (matriculas.Count == 0) {
+    if (sistema.Matriculas.Count == 0) {
         Console.WriteLine("Nenhuma matrícula cadastrada.");
         return;
     }
@@ -464,7 +439,7 @@ void ConsultarBoletim() {
     Console.Write("Digite o código do curso: ");
     string codigoCurso = Console.ReadLine()?.Trim() ?? string.Empty;
 
-    Matricula? matricula = matriculas.FirstOrDefault(m =>
+    Matricula? matricula = sistema.Matriculas.FirstOrDefault(m =>
         m.Aluno.Matricula.Equals(
             numeroMatricula,
             StringComparison.OrdinalIgnoreCase
@@ -531,7 +506,7 @@ void EnviarNotificacao() {
         string numeroMatricula =
             Console.ReadLine()?.Trim() ?? string.Empty;
 
-        destinatario = alunos.FirstOrDefault(a =>
+        destinatario = sistema.Alunos.FirstOrDefault(a =>
             a.Matricula.Equals(
                 numeroMatricula,
                 StringComparison.OrdinalIgnoreCase
@@ -548,7 +523,7 @@ void EnviarNotificacao() {
         string registroProfessor =
             Console.ReadLine()?.Trim() ?? string.Empty;
 
-        destinatario = professores.FirstOrDefault(p =>
+        destinatario = sistema.Professores.FirstOrDefault(p =>
             p.Registro.Equals(
                 registroProfessor,
                 StringComparison.OrdinalIgnoreCase

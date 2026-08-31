@@ -80,6 +80,7 @@ namespace SistemaGestaoFaculdade.Services {
 
             return aluno;
         }
+
         public void MatricularAlunoCurso(Aluno aluno, Curso curso) {
             bool jaMatriculado = Matriculas.Any(m => m.Aluno.Matricula == aluno.Matricula && m.Curso.Codigo == curso.Codigo);
 
@@ -88,6 +89,30 @@ namespace SistemaGestaoFaculdade.Services {
             Matricula novaMatricula = new Matricula(aluno, curso);
 
             Matriculas.Add(novaMatricula);
+        }
+
+        public Matricula BuscarMatricula(string numeroMatricula, string codigoCurso) {
+
+            Matricula? matricula = Matriculas.FirstOrDefault(m => m.Aluno.Matricula.Equals(numeroMatricula, StringComparison.OrdinalIgnoreCase) && m.Curso.Codigo.Equals(codigoCurso, StringComparison.OrdinalIgnoreCase));
+
+            if (matricula is null) throw new ArgumentException("Matrícula não encontrada para esse aluno e curso.");
+
+            return matricula;
+        }
+
+        public Disciplina BuscarDisciplinaDoCurso(Matricula matricula, string codigoDisciplina) {
+
+            Disciplina? disciplina = matricula.Curso.Disciplinas.FirstOrDefault(d => d.Codigo.Equals(codigoDisciplina, StringComparison.OrdinalIgnoreCase));
+
+            if (disciplina is null) throw new ArgumentException("A disciplina não pertence ao curso da matrícula.");
+
+            return disciplina;
+        }
+
+        public void LancarNota(Matricula matricula, Disciplina disciplina, double valor) {
+            Nota nota = new Nota(disciplina, valor);
+
+            matricula.Boletim.AdicionarNota(nota);
         }
     }
 }
