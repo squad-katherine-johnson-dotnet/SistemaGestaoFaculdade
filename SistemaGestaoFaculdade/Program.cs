@@ -92,8 +92,8 @@ void CadastrarCurso() {
     Console.WriteLine("          Cadastro de curso         ");
     Console.WriteLine("====================================");
 
-
-    Console.Write("\nInforme o código do curso: ");
+    try {
+        Console.Write("\nInforme o código do curso: ");
     string codigoCurso = Console.ReadLine();
 
     Console.Write("Informe o nome do curso: ");
@@ -109,7 +109,13 @@ void CadastrarCurso() {
 
     Curso curso = new Curso(codigoCurso, nomeCurso, tipoCurso);
 
-    sistema.CadastrarCurso(curso);
+        sistema.CadastrarCurso(curso);
+        Console.WriteLine("Curso cadastrado com sucesso!");
+    }
+    catch (ArgumentException ex) {
+        Console.WriteLine($"Erro: {ex.Message}");
+    }
+    Console.ReadKey();
 }
 
 void CadastrarAluno() {
@@ -194,16 +200,14 @@ void CadastrarProfessor() {
     Console.WriteLine("Sucesso: Professor cadastrado com sucesso!");
 }
 
-void CadastrarDisciplina()
-{
+void CadastrarDisciplina() {
     Console.Clear();
     Console.WriteLine("--- Cadastro de Disciplina ---");
 
     Console.Write("Código: ");
     string codigo = Console.ReadLine() ?? string.Empty;
 
-    if (sistema.Disciplinas.Any(d => d.Codigo == codigo))
-    {
+    if (sistema.Disciplinas.Any(d => d.Codigo == codigo)) {
         Console.WriteLine("Erro: Já existe uma disciplina cadastrada com este código.");
         return;
     }
@@ -212,8 +216,7 @@ void CadastrarDisciplina()
     string nome = Console.ReadLine() ?? string.Empty;
 
     Console.Write("Carga horária: ");
-    if (!int.TryParse(Console.ReadLine(), out int cargaHoraria))
-    {
+    if (!int.TryParse(Console.ReadLine(), out int cargaHoraria)) {
         Console.WriteLine("Erro: Carga horária inválida.");
         return;
     }
@@ -225,8 +228,7 @@ void CadastrarDisciplina()
         p => p.Registro == registroProfessor
     );
 
-    if (professor == null)
-    {
+    if (professor == null) {
         Console.WriteLine("Erro: Professor não encontrado. Cadastre o professor primeiro.");
         return;
     }
@@ -243,8 +245,7 @@ void CadastrarDisciplina()
     Console.WriteLine("Sucesso: Disciplina cadastrada com sucesso!");
 }
 
-void VincularDisciplinaCurso()
-{
+void VincularDisciplinaCurso() {
     Console.Clear();
     Console.WriteLine("--- Vincular Disciplina a um Curso ---");
 
@@ -255,8 +256,7 @@ void VincularDisciplinaCurso()
         c => c.Codigo == codigoCurso
     );
 
-    if (curso == null)
-    {
+    if (curso == null) {
         Console.WriteLine("Erro: Curso não encontrado.");
         return;
     }
@@ -268,14 +268,12 @@ void VincularDisciplinaCurso()
         d => d.Codigo == codigoDisciplina
     );
 
-    if (disciplina == null)
-    {
+    if (disciplina == null) {
         Console.WriteLine("Erro: Disciplina não encontrada.");
         return;
     }
 
-    if (curso.Disciplinas.Any(d => d.Codigo == disciplina.Codigo))
-    {
+    if (curso.Disciplinas.Any(d => d.Codigo == disciplina.Codigo)) {
         Console.WriteLine("Erro: Essa disciplina já está vinculada a esse curso.");
         return;
     }
@@ -285,8 +283,7 @@ void VincularDisciplinaCurso()
     Console.WriteLine("Sucesso: Disciplina vinculada ao curso!");
 }
 
-void MatricularAlunoCurso()
-{
+void MatricularAlunoCurso() {
     Console.Clear();
     Console.WriteLine("--- Matrícula de Aluno em Curso ---");
 
@@ -299,8 +296,7 @@ void MatricularAlunoCurso()
     );
 
     // Regra: o aluno deve existir
-    if (aluno == null)
-    {
+    if (aluno == null) {
         Console.WriteLine("Erro: Aluno não encontrado.");
         return;
     }
@@ -314,8 +310,7 @@ void MatricularAlunoCurso()
     );
 
     // Regra: o curso deve existir
-    if (curso == null)
-    {
+    if (curso == null) {
         Console.WriteLine("Erro: Curso não encontrado.");
         return;
     }
@@ -326,8 +321,7 @@ void MatricularAlunoCurso()
              m.Curso.Codigo == curso.Codigo
     );
 
-    if (jaMatriculado)
-    {
+    if (jaMatriculado) {
         Console.WriteLine("Erro: Este aluno já está matriculado neste curso.");
         return;
     }
@@ -348,7 +342,7 @@ void MatricularAlunoCurso()
     Console.WriteLine("Boletim criado automaticamente!");
     Console.WriteLine("====================================");
 }
- 
+
 void ConsultarPessoas() {
     Console.Clear();
     Console.WriteLine("--- Consulta de Pessoas ---");
@@ -385,22 +379,19 @@ void ConsultarCursos() {
     sistema.ConsultarCursos();
 }
 
-void ConsultarMatriculas()
-{
+void ConsultarMatriculas() {
     Console.Clear();
 
     Console.WriteLine("--- Consultar Matrículas ---");
 
     // Verifica se existem matrículas cadastradas
-    if (matriculas.Count == 0)
-    {
+    if (matriculas.Count == 0) {
         Console.WriteLine("Nenhuma matrícula cadastrada.");
         return;
     }
 
     // Percorre todas as matrículas
-    foreach (var matricula in matriculas)
-    {
+    foreach (var matricula in matriculas) {
         Console.WriteLine("\n------------------------------------");
         Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
         Console.WriteLine($"Matrícula: {matricula.Aluno.Matricula}");
@@ -410,13 +401,11 @@ void ConsultarMatriculas()
     }
 }
 
-void LancarNota()
-{
+void LancarNota() {
     Console.Clear();
     Console.WriteLine("--- Lançar Nota ---");
 
-    if (matriculas.Count == 0)
-    {
+    if (matriculas.Count == 0) {
         Console.WriteLine("Nenhuma matrícula cadastrada.");
         return;
     }
@@ -438,22 +427,19 @@ void LancarNota()
         )
     );
 
-    if (matricula is null)
-    {
+    if (matricula is null) {
         Console.WriteLine("Matrícula não encontrada para esse aluno e curso.");
         return;
     }
 
-    if (matricula.Curso.Disciplinas.Count == 0)
-    {
+    if (matricula.Curso.Disciplinas.Count == 0) {
         Console.WriteLine("Esse curso ainda não possui disciplinas vinculadas.");
         return;
     }
 
     Console.WriteLine("\nDisciplinas do curso:");
 
-    foreach (Disciplina item in matricula.Curso.Disciplinas)
-    {
+    foreach (Disciplina item in matricula.Curso.Disciplinas) {
         Console.WriteLine($"{item.Codigo} - {item.Nome}");
     }
 
@@ -467,22 +453,19 @@ void LancarNota()
         )
     );
 
-    if (disciplina is null)
-    {
+    if (disciplina is null) {
         Console.WriteLine("A disciplina não pertence ao curso da matrícula.");
         return;
     }
 
     Console.Write("Digite a nota entre 0 e 10: ");
 
-    if (!double.TryParse(Console.ReadLine(), out double valor))
-    {
+    if (!double.TryParse(Console.ReadLine(), out double valor)) {
         Console.WriteLine("Digite uma nota válida.");
         return;
     }
 
-    try
-    {
+    try {
         Nota nota = new Nota(disciplina, valor);
         matricula.Boletim.AdicionarNota(nota);
 
@@ -492,19 +475,16 @@ void LancarNota()
         Console.WriteLine($"Disciplina: {disciplina.Nome}");
         Console.WriteLine($"Nota: {valor:F1}");
     }
-    catch (ArgumentException ex)
-    {
+    catch (ArgumentException ex) {
         Console.WriteLine($"Erro: {ex.Message}");
     }
 }
 
-void ConsultarBoletim()
-{
+void ConsultarBoletim() {
     Console.Clear();
     Console.WriteLine("--- Consultar Boletim ---");
 
-    if (matriculas.Count == 0)
-    {
+    if (matriculas.Count == 0) {
         Console.WriteLine("Nenhuma matrícula cadastrada.");
         return;
     }
@@ -526,8 +506,7 @@ void ConsultarBoletim()
         )
     );
 
-    if (matricula is null)
-    {
+    if (matricula is null) {
         Console.WriteLine("Matrícula não encontrada para esse aluno e curso.");
         return;
     }
@@ -540,16 +519,14 @@ void ConsultarBoletim()
     Console.WriteLine($"Curso: {matricula.Curso.Nome}");
     Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
 
-    if (matricula.Boletim.Notas.Count == 0)
-    {
+    if (matricula.Boletim.Notas.Count == 0) {
         Console.WriteLine("\nNenhuma nota lançada.");
         return;
     }
 
     Console.WriteLine("\nNotas:");
 
-    foreach (Nota nota in matricula.Boletim.Notas)
-    {
+    foreach (Nota nota in matricula.Boletim.Notas) {
         string situacao = nota.EstaAprovado(matricula.Curso.Tipo)
             ? "Aprovado"
             : "Reprovado";
