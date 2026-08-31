@@ -71,3 +71,66 @@ O sistema permite:
 
 - A regra de aprovação é determinada pelo tipo do curso da matrícula.
 
+## 👥 Divisão da Squad
+
+O desenvolvimento do sistema foi dividido entre as integrantes do squad, com cada pessoa responsável por uma parte das entidades, regras de negócio e funcionalidades do menu.
+
+### 👤  Rosana Lima — Pessoa, Aluno e Professor
+
+Responsável por:
+
+- Implementação da classe abstrata `Pessoa` e das classes `Aluno` e `Professor`;
+- Cadastro e consulta de professores e alunos;
+- Validações de CPF, registro e matrícula únicos;
+- Implementação da interface `INotificavel` e validações relacionadas aos alunos.
+
+---
+
+### 👤Bianca Fernandes — Curso, Menu e Estrutura do Projeto
+
+Responsável por:
+
+- Implementação do enum `TipoCurso` e da classe `Curso`;
+- Cadastro e consulta de cursos, incluindo validação de código único;
+- Implementação do menu do sistema;
+- Criação e configuração inicial do repositório;
+- Implementação e padronização do tratamento de exceções com `try/catch`.
+
+---
+
+### 👤 Yasmin Bezerra — Disciplina
+
+Responsável por:
+
+- Implementação da classe `Disciplina`;
+- Cadastro e vinculação de disciplinas aos cursos;
+- Validações de código único, professor responsável e disciplinas duplicadas no mesmo curso.
+
+---
+
+### 👤 Daniella Camilo — Matrícula
+
+Responsável por:
+
+- Implementação da classe `Matricula`;
+- Matrícula e consulta de alunos nos cursos;
+- Validações de aluno e curso existentes e prevenção de matrículas duplicadas;
+- Criação automática do boletim no momento da matrícula.
+
+---
+
+### 👤 Mariana Brombilla — Boletim, Notas e Notificações
+
+Responsável por:
+
+- Implementação das classes `Boletim` e `Nota`;
+- Lançamento de notas e consulta de boletins;
+- Implementação do cálculo da situação do aluno;
+- Validações relacionadas à matrícula, disciplinas, intervalo de notas e isolamento dos boletins;
+- Implementação da funcionalidade de envio de notificações.
+
+---
+
+### 🤝 Integração e finalização
+
+Após a implementação das funcionalidades individuais, o squad realizou a integração das partes do sistema, ajustes finais, padronização do código e validação do funcionamento geral da aplicação.
