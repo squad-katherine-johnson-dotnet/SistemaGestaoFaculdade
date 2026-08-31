@@ -217,40 +217,29 @@ void CadastrarDisciplina() {
 
 void VincularDisciplinaCurso() {
     Console.Clear();
-    Console.WriteLine("--- Vincular Disciplina a um Curso ---");
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("   Vincular Disciplina a um Curso   ");
+    Console.WriteLine("====================================");
 
-    Console.Write("Código do curso: ");
-    string codigoCurso = Console.ReadLine() ?? string.Empty;
+    try {
+        Console.Write("Código do curso: ");
+        string codigoCurso = Console.ReadLine() ?? string.Empty;
 
-    Curso? curso = sistema.Cursos.FirstOrDefault(
-        c => c.Codigo == codigoCurso
-    );
+        Curso curso = sistema.BuscarCursoPorCodigo(codigoCurso);
 
-    if (curso == null) {
-        Console.WriteLine("Erro: Curso não encontrado.");
-        return;
+        Console.Write("Código da disciplina: ");
+        string codigoDisciplina = Console.ReadLine() ?? string.Empty;
+
+        Disciplina disciplina = sistema.BuscarDisciplinaPorCodigo(codigoDisciplina);
+
+        sistema.VincularDisciplinaCurso(curso, disciplina);
+
+        Console.WriteLine("Disciplina vinculada ao curso!");
     }
-
-    Console.Write("Código da disciplina: ");
-    string codigoDisciplina = Console.ReadLine() ?? string.Empty;
-
-    Disciplina? disciplina = sistema.Disciplinas.FirstOrDefault(
-        d => d.Codigo == codigoDisciplina
-    );
-
-    if (disciplina == null) {
-        Console.WriteLine("Erro: Disciplina não encontrada.");
-        return;
+    catch (ArgumentException ex) {
+        Console.WriteLine($"Erro: {ex.Message}");
     }
-
-    if (curso.Disciplinas.Any(d => d.Codigo == disciplina.Codigo)) {
-        Console.WriteLine("Erro: Essa disciplina já está vinculada a esse curso.");
-        return;
-    }
-
-    sistema.VincularDisciplinaCurso(curso, disciplina);
-
-    Console.WriteLine("Sucesso: Disciplina vinculada ao curso!");
+    Console.ReadKey();
 }
 
 void MatricularAlunoCurso() {
@@ -512,6 +501,7 @@ void ConsultarBoletim() {
 
     Console.WriteLine("------------------------------------");
 }
+
 void EnviarNotificacao() {
     Console.Clear();
     Console.WriteLine("--- Enviar Notificação ---");

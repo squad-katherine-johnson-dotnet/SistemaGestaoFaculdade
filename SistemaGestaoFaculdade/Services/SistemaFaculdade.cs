@@ -35,20 +35,35 @@ namespace SistemaGestaoFaculdade.Services {
             Alunos.Add(aluno);
         }
 
+        public Professor BuscarProfessorPorRegistro(string registro) {
+
+            Professor? professor = Professores.FirstOrDefault(p => p.Registro == registro);
+
+            if (professor == null) throw new ArgumentException("Professor não encontrado. Cadastre o professor primeiro.");
+
+            return professor;
+        }
+
         public void CadastrarDisciplina(Disciplina disciplina) {
             if (Disciplinas.Any(x => x.Codigo == disciplina.Codigo)) throw new ArgumentException("Já existe uma disciplina cadastrada com esse código");
 
             Disciplinas.Add(disciplina);
         }
-        public Professor BuscarProfessorPorRegistro(string registro) {
 
-            Professor? professor = Professores.FirstOrDefault(
-                p => p.Registro == registro
-            );
+        public Curso BuscarCursoPorCodigo(string codigo) {
+            Curso? curso = Cursos.FirstOrDefault(c => c.Codigo == codigo.Trim().ToUpper());
 
-            if (professor == null) throw new ArgumentException("Professor não encontrado. Cadastre o professor primeiro.");
+            if (curso == null) throw new ArgumentException("Curso não encontrado.");
 
-            return professor;
+            return curso;
+        }
+
+        public Disciplina BuscarDisciplinaPorCodigo(string codigo) {
+            Disciplina? disciplina = Disciplinas.FirstOrDefault(d => d.Codigo == codigo.Trim().ToUpper());
+
+            if (disciplina == null) throw new ArgumentException("Disciplina não encontrada.");
+
+            return disciplina;
         }
 
         public void VincularDisciplinaCurso(Curso curso, Disciplina disciplina) {
