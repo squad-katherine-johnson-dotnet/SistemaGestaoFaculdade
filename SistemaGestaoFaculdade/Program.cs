@@ -478,7 +478,10 @@ void ConsultarBoletim() {
 
 void EnviarNotificacao() {
     Console.Clear();
-    Console.WriteLine("--- Enviar Notificação ---");
+    Console.WriteLine("------------------------------------");
+    Console.WriteLine("         Enviar Notificação         ");
+    Console.WriteLine("------------------------------------");
+
     Console.WriteLine("1 - Aluno");
     Console.WriteLine("2 - Professor");
     Console.Write("Escolha o destinatário: ");
@@ -492,37 +495,15 @@ void EnviarNotificacao() {
 
     if (tipoDestinatario == 1) {
         Console.Write("Digite a matrícula do aluno: ");
-        string numeroMatricula =
-            Console.ReadLine()?.Trim() ?? string.Empty;
+        string numeroMatricula = Console.ReadLine()?.Trim() ?? string.Empty;
 
-        destinatario = sistema.Alunos.FirstOrDefault(a =>
-            a.Matricula.Equals(
-                numeroMatricula,
-                StringComparison.OrdinalIgnoreCase
-            )
-        );
-
-        if (destinatario is null) {
-            Console.WriteLine("Aluno não encontrado.");
-            return;
-        }
+        destinatario = sistema.BuscarAlunoPorMatricula(numeroMatricula);
     }
     else if (tipoDestinatario == 2) {
         Console.Write("Digite o registro do professor: ");
-        string registroProfessor =
-            Console.ReadLine()?.Trim() ?? string.Empty;
+        string registroProfessor = Console.ReadLine()?.Trim() ?? string.Empty;
 
-        destinatario = sistema.Professores.FirstOrDefault(p =>
-            p.Registro.Equals(
-                registroProfessor,
-                StringComparison.OrdinalIgnoreCase
-            )
-        );
-
-        if (destinatario is null) {
-            Console.WriteLine("Professor não encontrado.");
-            return;
-        }
+        destinatario = sistema.BuscarProfessorPorRegistro(registroProfessor);
     }
     else {
         Console.WriteLine("Opção inválida.");
