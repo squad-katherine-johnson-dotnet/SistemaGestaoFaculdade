@@ -16,9 +16,7 @@ namespace SistemaGestaoFaculdade.Entities
                 );
 
             if (valor < 0 || valor > 10)
-                throw new ArgumentOutOfRangeException(
-                    nameof(valor),
-                    "A nota deve estar entre 0 e 10."
+                throw new ArgumentException("A nota deve estar entre 0 e 10.");
                 );
 
             Disciplina = disciplina;
