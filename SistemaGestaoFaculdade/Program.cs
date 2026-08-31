@@ -73,7 +73,7 @@ while (continuar) {
             EnviarNotificacao();
             break;
         case 0:
-            Console.WriteLine("Sistema encerrado.");
+            Console.WriteLine("****** Sistema encerrado ******");
             continuar = false;
             break;
 
@@ -287,7 +287,7 @@ void ConsultarPessoas() {
         }
     }
 
-    Console.WriteLine("\n----------- Alunos ------------ ");
+    Console.WriteLine("\n-------------- Alunos -------------- ");
 
     if (sistema.Alunos.Count == 0) {
         Console.WriteLine("Nenhum aluno cadastrado.");
@@ -323,8 +323,7 @@ void ConsultarCursos() {
         }
         else {
             foreach (var disciplina in curso.Disciplinas) {
-                Console.WriteLine(disciplina.Nome);
-                Console.WriteLine($"Professor(a): {disciplina.ProfessorResponsavel.Nome}");
+                Console.WriteLine($"{disciplina.Nome} - Professor(a): {disciplina.ProfessorResponsavel.Nome}");
             }
         }
 
@@ -337,8 +336,7 @@ void ConsultarCursos() {
         }
         else {
             foreach (var matricula in matriculasDoCurso) {
-                Console.WriteLine(matricula.Aluno.Nome.ToUpper());
-                Console.WriteLine($"Matrícula: {matricula.Aluno.Matricula}");
+                Console.WriteLine($"{matricula.Aluno.Nome.ToUpper()} - Matrícula: {matricula.Aluno.Matricula}");
             }
         }
         Console.WriteLine("------------------------------------");
@@ -449,8 +447,8 @@ void ConsultarBoletim() {
         Console.WriteLine("====================================");
         Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
         Console.WriteLine($"Matrícula: {matricula.Aluno.Matricula}");
-        Console.WriteLine($"Curso: {matricula.Curso.Nome}");
-        Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
+        Console.WriteLine($"Curso: {matricula.Curso.Nome.ToUpper()}");
+        Console.WriteLine($"Tipo: {(matricula.Curso.Tipo == TipoCurso.Graduacao ? "Graduação" : "Pós-Graduação")}");
 
         if (matricula.Boletim.Notas.Count == 0) {
             Console.WriteLine("\nNenhuma nota lançada.");
