@@ -36,10 +36,19 @@ namespace SistemaGestaoFaculdade.Services {
         }
 
         public void CadastrarDisciplina(Disciplina disciplina) {
-            if (Disciplinas.Any(x => x.Codigo == disciplina.Codigo))
-                throw new ArgumentException("Já existe uma disciplina cadastrada com esse código");
+            if (Disciplinas.Any(x => x.Codigo == disciplina.Codigo)) throw new ArgumentException("Já existe uma disciplina cadastrada com esse código");
 
             Disciplinas.Add(disciplina);
+        }
+        public Professor BuscarProfessorPorRegistro(string registro) {
+
+            Professor? professor = Professores.FirstOrDefault(
+                p => p.Registro == registro
+            );
+
+            if (professor == null) throw new ArgumentException("Professor não encontrado. Cadastre o professor primeiro.");
+
+            return professor;
         }
 
         public void VincularDisciplinaCurso(Curso curso, Disciplina disciplina) {

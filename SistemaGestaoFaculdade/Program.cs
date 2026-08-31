@@ -1,7 +1,8 @@
-﻿using SistemaGestaoFaculdade.Entities;
+﻿using Microsoft.Win32;
+using SistemaGestaoFaculdade.Entities;
 using SistemaGestaoFaculdade.Enums;
-using SistemaGestaoFaculdade.Services;
 using SistemaGestaoFaculdade.Interfaces;
+using SistemaGestaoFaculdade.Services;
 
 SistemaFaculdade sistema = new SistemaFaculdade();
 
@@ -89,7 +90,7 @@ while (continuar) {
 void CadastrarCurso() {
     Console.Clear();
     Console.WriteLine("\n====================================");
-    Console.WriteLine("          Cadastro de curso         ");
+    Console.WriteLine("          Cadastro de Curso         ");
     Console.WriteLine("====================================");
 
     try {
@@ -183,47 +184,35 @@ void CadastrarAluno() {
 
 void CadastrarDisciplina() {
     Console.Clear();
-    Console.WriteLine("--- Cadastro de Disciplina ---");
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("       Cadastro de Disciplina       ");
+    Console.WriteLine("====================================");
 
-    Console.Write("Código: ");
-    string codigo = Console.ReadLine() ?? string.Empty;
+    try {
+        Console.Write("Código: ");
+        string codigo = Console.ReadLine() ?? string.Empty;
 
-    if (sistema.Disciplinas.Any(d => d.Codigo == codigo)) {
-        Console.WriteLine("Erro: Já existe uma disciplina cadastrada com este código.");
-        return;
+        Console.Write("Nome: ");
+        string nome = Console.ReadLine() ?? string.Empty;
+
+        Console.Write("Carga horária: ");
+        if (!int.TryParse(Console.ReadLine(), out int cargaHoraria)) throw new ArgumentException("Carga horária inválida.");
+
+        Console.Write("Registro do professor responsável: ");
+        string registroProfessor = Console.ReadLine() ?? string.Empty;
+
+        Professor professor = sistema.BuscarProfessorPorRegistro(registroProfessor);
+
+        Disciplina novaDisciplina = new Disciplina(codigo, nome, cargaHoraria, professor);
+
+        sistema.CadastrarDisciplina(novaDisciplina);
+
+        Console.WriteLine("Disciplina cadastrada com sucesso!");
     }
-
-    Console.Write("Nome: ");
-    string nome = Console.ReadLine() ?? string.Empty;
-
-    Console.Write("Carga horária: ");
-    if (!int.TryParse(Console.ReadLine(), out int cargaHoraria)) {
-        Console.WriteLine("Erro: Carga horária inválida.");
-        return;
+    catch (ArgumentException ex) {
+        Console.WriteLine($"Erro: {ex.Message}");
     }
-
-    Console.Write("Registro do professor responsável: ");
-    string registroProfessor = Console.ReadLine() ?? string.Empty;
-
-    Professor? professor = professores.FirstOrDefault(
-        p => p.Registro == registroProfessor
-    );
-
-    if (professor == null) {
-        Console.WriteLine("Erro: Professor não encontrado. Cadastre o professor primeiro.");
-        return;
-    }
-
-    Disciplina novaDisciplina = new Disciplina(
-        codigo,
-        nome,
-        cargaHoraria,
-        professor
-    );
-
-    sistema.CadastrarDisciplina(novaDisciplina);
-
-    Console.WriteLine("Sucesso: Disciplina cadastrada com sucesso!");
+    Console.ReadKey();
 }
 
 void VincularDisciplinaCurso() {
