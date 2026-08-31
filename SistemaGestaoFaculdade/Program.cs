@@ -426,65 +426,54 @@ void LancarNota() {
 
 void ConsultarBoletim() {
     Console.Clear();
-    Console.WriteLine("--- Consultar Boletim ---");
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("         Consultar Boletim          ");
+    Console.WriteLine("====================================");
 
     if (sistema.Matriculas.Count == 0) {
         Console.WriteLine("Nenhuma matrícula cadastrada.");
         return;
     }
 
-    Console.Write("Digite a matrícula do aluno: ");
-    string numeroMatricula = Console.ReadLine()?.Trim() ?? string.Empty;
+    try {
+        Console.Write("Digite a matrícula do aluno: ");
+        string numeroMatricula = Console.ReadLine()?.Trim() ?? string.Empty;
 
-    Console.Write("Digite o código do curso: ");
-    string codigoCurso = Console.ReadLine()?.Trim() ?? string.Empty;
+        Console.Write("Digite o código do curso: ");
+        string codigoCurso = Console.ReadLine()?.Trim() ?? string.Empty;
 
-    Matricula? matricula = sistema.Matriculas.FirstOrDefault(m =>
-        m.Aluno.Matricula.Equals(
-            numeroMatricula,
-            StringComparison.OrdinalIgnoreCase
-        ) &&
-        m.Curso.Codigo.Equals(
-            codigoCurso,
-            StringComparison.OrdinalIgnoreCase
-        )
-    );
+        Matricula matricula = sistema.BuscarMatricula(numeroMatricula, codigoCurso);
 
-    if (matricula is null) {
-        Console.WriteLine("Matrícula não encontrada para esse aluno e curso.");
-        return;
-    }
+        Console.WriteLine("\n====================================");
+        Console.WriteLine("              BOLETIM");
+        Console.WriteLine("====================================");
+        Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
+        Console.WriteLine($"Matrícula: {matricula.Aluno.Matricula}");
+        Console.WriteLine($"Curso: {matricula.Curso.Nome}");
+        Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
 
-    Console.WriteLine("\n====================================");
-    Console.WriteLine("              BOLETIM");
-    Console.WriteLine("====================================");
-    Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
-    Console.WriteLine($"Matrícula: {matricula.Aluno.Matricula}");
-    Console.WriteLine($"Curso: {matricula.Curso.Nome}");
-    Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
+        if (matricula.Boletim.Notas.Count == 0) {
+            Console.WriteLine("\nNenhuma nota lançada.");
+            return;
+        }
 
-    if (matricula.Boletim.Notas.Count == 0) {
-        Console.WriteLine("\nNenhuma nota lançada.");
-        return;
-    }
+        Console.WriteLine("\nNotas:");
 
-    Console.WriteLine("\nNotas:");
+        foreach (var nota in matricula.Boletim.Notas) {
+            string situacao = nota.EstaAprovado(matricula.Curso.Tipo) ? "Aprovado" : "Reprovado";
 
-    foreach (Nota nota in matricula.Boletim.Notas) {
-        string situacao = nota.EstaAprovado(matricula.Curso.Tipo)
-            ? "Aprovado"
-            : "Reprovado";
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine($"Disciplina: {nota.Disciplina.Nome} " + $"({nota.Disciplina.Codigo})");
+            Console.WriteLine($"Nota: {nota.Valor:F1}");
+            Console.WriteLine($"Situação: {situacao}");
+        }
 
         Console.WriteLine("------------------------------------");
-        Console.WriteLine(
-            $"Disciplina: {nota.Disciplina.Nome} " +
-            $"({nota.Disciplina.Codigo})"
-        );
-        Console.WriteLine($"Nota: {nota.Valor:F1}");
-        Console.WriteLine($"Situação: {situacao}");
     }
-
-    Console.WriteLine("------------------------------------");
+    catch (ArgumentException ex) {
+        Console.WriteLine($"Erro: {ex.Message}");
+    }
+    Console.ReadKey();
 }
 
 void EnviarNotificacao() {
