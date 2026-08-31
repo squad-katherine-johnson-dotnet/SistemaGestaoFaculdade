@@ -276,29 +276,31 @@ void MatricularAlunoCurso() {
 
 void ConsultarPessoas() {
     Console.Clear();
-    Console.WriteLine("--- Consulta de Pessoas ---");
+    Console.WriteLine("\n====================================");
+    Console.WriteLine("          Consultar Pessoas         ");
+    Console.WriteLine("====================================");
 
-    Console.WriteLine("\n=== PROFESSORES ===");
-    if (professores.Count == 0) {
+    Console.WriteLine("\n----------- Professores ------------ ");
+
+    if (sistema.Professores.Count == 0) {
         Console.WriteLine("Nenhum professor cadastrado.");
     }
     else {
-        foreach (var prof in professores) {
-            prof.ExibirDados();//Uso do método polimórfico
+        foreach (var prof in sistema.Professores) {
+            prof.ExibirDados();
         }
     }
 
-    Console.WriteLine("\n=== ALUNOS ===");
-    if (alunos.Count == 0) {
+    Console.WriteLine("\n----------- Alunos ------------ ");
+
+    if (sistema.Alunos.Count == 0) {
         Console.WriteLine("Nenhum aluno cadastrado.");
     }
     else {
-        foreach (var aluno in alunos) {
+        foreach (var aluno in sistema.Alunos) {
             aluno.ExibirDados();
         }
     }
-
-
 }
 
 void ConsultarCursos() {
